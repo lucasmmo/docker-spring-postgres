@@ -1,3 +1,3 @@
 #!/bin/bash
-cd ../backend-spring
+cd ../dockerized
 docker-compose up --build -d
