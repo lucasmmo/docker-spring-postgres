@@ -2,7 +2,8 @@
 Description = Payshare Spring Boot + Postgres
 
 [Service]
-ExecStart = /home/ec2-user/backend-spring/setup/init.sh
+WorkingDirectory = /home/ec2-user/docker-spring-postgres/setup/
+ExecStart = ./init.sh
 Restart=on-failure
 
 [Install]
