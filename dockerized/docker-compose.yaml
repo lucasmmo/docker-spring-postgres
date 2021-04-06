@@ -1,22 +1,35 @@
 version: '3'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile-backend
+  app_backend:
+    image: lucasmocerinomonteiro/payshare-backend:v1
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       - db
     environment:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+  api-mercado-pago:
+    image: lucasmocerinomonteiro/payshare-api-mercado-pago:v1
+    ports:
+      - 8081:${NODE_API_PORT}
+    depends_on:
+      - db
+      - app_backend
+    environment:
+      - NODE_HOSTNAME_DATABASE=db
+      - NODE_DATABASE_NAME=${POSTGRES_BASE}
+      - NODE_USERNAME=${POSTGRES_USERNAME}
+      - NODE_PASSWORD=${POSTGRES_PASSWORD}
+      - NODE_PORT_DATABASE=${POSTGRES_PORT}
+      - PORT=${NODE_API_PORT}
           
   db:
     image: 'postgres:13.1-alpine'
     container_name: db
     environment:
-      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
-      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
