@@ -5,7 +5,7 @@ volumes:
 
 services:
   app-backend-1:
-    image: lucasmocerinomonteiro/payshare-backend:v1
+    image: lucasmocerinomonteiro/payshare-backend:v2
     ports:
       - 8080:8080
     depends_on:
